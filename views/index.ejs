@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs')%>
+
+    <body>
+
+        <%- include('./partials/nav.ejs')%>
+
+            <div class="remarks content">
+                <h2>Tenants' remarks</h2>
+                <% if (remarks.length> 0) { %>
+                    <% remarks.forEach(remark=> { %>
+                        <a class='single' href="/remarks/<%=remark._id%>">
+                            <h3 class="title"><%= remark.title %></h3>
+                            <p class="snippet"><%= remark.snippet %></p>
+                        </a>
+                    <% }) %>
+                <% } else { %>
+                    <p>There is no remarks to display</p>
+                    <%}%>
+
+            </div>
+            <%- include('./partials/footer.ejs')%>
+    </body>
+
+</html>
