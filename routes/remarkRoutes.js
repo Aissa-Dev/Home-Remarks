@@ -1,57 +1,14 @@
 const express = require('express');
 const Remark = require('../models/remark');
+const remarkController = require('../controllers/remarkController');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    Remark.find().sort({ createdAt: -1 })
-        .then((result) => {
-            res.render('index', { title: 'All remarks', remarks: result })
-        })
-        .catch((err) => {
-            console.log(err)
-        });
-});
+router.get('/', remarkController.remark_index);
+router.post('/create', remarkController.remark_create_post);
+router.get('/create', remarkController.remark_creat_get);
+router.get('/:id', remarkController.remark_details);
+router.delete('/:id', remarkController.remark_delete);
 
 
-router.get('/create', (req, res) => {
-    res.render('create', { title: 'Create a new remark' });
-});
-
-router.post('/create', (req, res) => {
-    const remark = new Remark(req.body);
-    remark.save()
-        .then((result) => {
-            res.redirect('/remarks');
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-});
-
-router.delete('/:id', (req, res) => {
-    const id = req.params.id;
-    Remark.findByIdAndDelete(id)
-    .then(result => {
-        res.json(
-            {
-                redirect:'/remarks'
-            }
-        )
-    })
-    .catch(err => console.log(err))
-
-});
-
-router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    Remark.findById(id)
-        .then(result => {
-            res.render('details', {remark: result, title: 'remark Details'});
-        })
-        .catch(err => {
-            console.log(err)
-        });
-
-});
 
 module. exports = router;
