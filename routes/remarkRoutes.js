@@ -1,5 +1,4 @@
 const express = require('express');
-const Remark = require('../models/remark');
 const remarkController = require('../controllers/remarkController');
 const router = express.Router();
 
