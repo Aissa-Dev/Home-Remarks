@@ -1,8 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const Remark = require('./models/remark');
+const remarkRoutes = require('./routes/remarkRoutes');
 require('dotenv').config();
+
 
 
 // Express app
@@ -28,60 +29,14 @@ app.get('/', (req, res) => {
     res.redirect('/remarks');
 });
 
-app.get('/remarks', (req, res) => {
-    Remark.find().sort({ createdAt: -1 })
-        .then((result) => {
-            res.render('index', { title: 'All remarks', remarks: result })
-        })
-        .catch((err) => {
-            console.log(err)
-        });
-});
 
 app.get('/about', (req, res) => {
     res.render('about', { title: 'About' });
 });
 
-app.get('/remarks/create', (req, res) => {
-    res.render('create', { title: 'Create a new remark' });
-});
+//remarks routes
 
-app.post('/remarks/create', (req, res) => {
-    const remark = new Remark(req.body);
-    remark.save()
-        .then((result) => {
-            res.redirect('/remarks');
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-});
-
-app.delete('/remark/:id', (req, res) => {
-    const id = req.params.id;
-    Remark.findByIdAndDelete(id)
-    .then(result => {
-        res.json(
-            {
-                redirect:'/remarks'
-            }
-        )
-    })
-    .catch(err => console.log(err))
-
-});
-
-app.get('/remarks/:id', (req, res) => {
-    const id = req.params.id;
-    Remark.findById(id)
-        .then(result => {
-            res.render('details', {remark: result, title: 'remark Details'});
-        })
-        .catch(err => {
-            console.log(err)
-        });
-
-});
+app.use('/remarks',remarkRoutes);
 
 // 404 page
 app.use((req, res) => {
